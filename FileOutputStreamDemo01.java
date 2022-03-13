@@ -1,128 +1,96 @@
-package com.java.Deno_01;
+package com.java.zijieliu_03_09;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-
-public class FileOutputStreamDemo01 {
-    public static void main(String[] args) throws IOException {
-        /*
-        //åˆ›å»ºæ–‡ä»¶
-        File f1=new File("D:\\\\Javaå¦ä¸€ä¸ªè½¯ä»¶\\\\ç»ƒä¹ \\\\myByteStream\\fos.txt");
-        System.out.println(f1.createNewFile());
-        //åˆ›å»ºå­—èŠ‚æµè¾“å‡ºå¯¹è±¡
-        //FileOutputStream fos=new FileOutputStream("D:\Javaå¦ä¸€ä¸ªè½¯ä»¶\ç»ƒä¹ \myByteStream\fos.txt");
-        FileOutputStream fos=new FileOutputStream("D:\\Javaå¦ä¸€ä¸ªè½¯ä»¶\\ç»ƒä¹ \\myByteStream\\fos.txt",true);
-        //å†™æ•°æ®
-        for(int i=0;i<10;i++){
-            fos.write("hello".getBytes());
-            fos.write("\r\n".getBytes());
-        }
-        //é‡Šæ”¾èµ„æº
-        fos.close();
-         */
-
-        //å­—èŠ‚æµå†™æ•°æ®åŠ å…¥å¼‚å¸¸å¤„ç†
-        /*
-        //åŠ å…¥ finallyæ¥å®ç°é‡Šæ”¾èµ„æº
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream("D:\\Javaå¦ä¸€ä¸ªè½¯ä»¶\\ç»ƒä¹ \\myByteStream\\fos.txt", true);
-            fos.write("hello".getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if(fos !=null){
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-         */
-
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.Scanner;
 
 /*
-        //ä½¿ç”¨å­—èŠ‚æµè¾“å…¥è¯»æ•°æ®
-        //1.åˆ›å»ºå­—èŠ‚è¾“å…¥æµå¯¹è±¡  FileFileOutputStream(String name)
-        FileInputStream fis=new FileInputStream("D:\\Javaå¦ä¸€ä¸ªè½¯ä»¶\\ç»ƒä¹ \\myByteStream\\fos.txt");
+  IO¸ÅÄî 	OÁ÷ÓÃÀ´´¦ÀíÉè±¸Ö®¼äµÄÊı¾İ´«Êä,Java¶ÔÊı¾İµÄ²Ù×÷ÊÇÍ¨¹ıÁ÷µÄ·½Ê½
+		JavaÓÃÓÚ²Ù×÷Á÷µÄÀà¶¼ÔÚIO°üÖĞ£¬
+			
+		ÊäÈëÁ÷£¨¶ÁÈ¡Êı¾İ£©
+		Êä³öÁ÷£¨Ğ´Êı¾İ£©	
+		
+		Á÷°´²Ù×÷ÀàĞÍ·ÖÎªÁ½ÖÖ
+		×Ö½ÚÁ÷ : ×Ö½ÚÁ÷¿ÉÒÔ²Ù×÷ÈÎºÎÊı¾İ,ÒòÎªÔÚ¼ÆËã»úÖĞÈÎºÎÊı¾İ¶¼ÊÇÒÔ×Ö½ÚµÄĞÎÊ½´æ´¢µÄ
+		×Ö·ûÁ÷ : ×Ö·ûÁ÷Ö»ÄÜ²Ù×÷´¿×Ö·ûÊı¾İ£¬±È½Ï·½±ã¡£
 
-        //2.è°ƒç”¨å­—èŠ‚è¾“å…¥æµå¯¹è±¡çš„è¯»æ•°æ®æ–¹æ³•
-        //iny read() ä»è¯¥è¾“å…¥æµè¯»å–ä¸€ä¸ªå­—èŠ‚çš„æ•°æ®
-//        int by=fis.read();
-//        System.out.println(by);
-//        System.out.println((char)by);
-
-//        int by= fis.read();
-//        while(by !=-1){
-//            System.out.print((char)by);
-//            by=fis.read();
-//        }
-
-
-//        fis.read() è¯»æ•°æ®
-//        by=fis.read() æŠŠè¯»åˆ°çš„æ•°æ®èµ‹å€¼ç»™by
-//        by!=-1 åˆ¤æ–­è¯»å–åˆ°çš„æ•°æ®æ˜¯å¦ä¸º-1
-
-        //ä¼˜åŒ–ä¸Šé¢çš„å¾ªç¯ä»£ç 
-        int by;
-        while((by=fis.read()) !=-1){
-            System.out.print((char)by);
-            System.out.print(by);
-        }
-
-        //3.é‡Šæ”¾èµ„æº
-        fis.close();
+  FileOutputStream ÎÄ¼şÊä³öÁ÷ÓÃÓÚ½«Êı¾İĞ´ÈëFile
+  FileOutputStream(String name); ´´½¨ÎÄ¼şÊä³öÁ÷ÒÔÖ¸¶¨µÄÃû³ÆĞ´ÈëÎÄ¼ş
+  
  */
+public class FileOutputStreamDemo01 {
 
-
-
-        //ä½¿ç”¨å­—èŠ‚æµè¾“å…¥è¯»æ•°ç»„æ•°æ® (ä¸€æ¬¡è¯»å–ä¸€ä¸ªå­—èŠ‚æ•°ç»„æ•°æ®)
-        /*
-        //1.åˆ›å»ºå­—èŠ‚è¾“å…¥æµå¯¹è±¡  FileFileOutputStream(String name)
-        FileInputStream fis=new FileInputStream("D:\\Javaå¦ä¸€ä¸ªè½¯ä»¶\\ç»ƒä¹ \\myByteStream\\fos.txt");
-        //è°ƒç”¨å­—èŠ‚æµè¾“å…¥å¯¹è±¡çš„è¯»æ•°æ–¹æ³•  int read(byte[] b) ä»è¯¥è¾“å…¥æµè¯»å–æœ€å¤š b.lenthä¸ªå­—èŠ‚çš„æ•°æ®åˆ°ä¸€ä¸ªå­—èŠ‚æ•°ç»„
-//        byte[] bys=new byte[5];
-//        int len=fis.read(bys);
-//        System.out.println(len);
-//        System.out.println(new String(bys,0,len));
-
-        //ä½¿ç”¨å¾ªç¯æ”¹è¿›ä»£ç 
-        byte[] bys=new byte[1024]; //1024åŠå…¶æ•´æ•°å€
-        int len;
-        while((len=fis.read(bys))!=-1){
-            System.out.println(new String(bys,0,len));
-        }
-
-        //é‡Šæ”¾èµ„æº
-        fis.close();
-
-         */
-
-        //å­—èŠ‚ç¼“å†²æµ
-
-        //å­—èŠ‚ç¼“å†²è¾“å‡ºæµï¼šBufferedOutputStream(OutputStream out)
-//        FileOutputStream fos=new FileOutputStream("D:\\Javaå¦ä¸€ä¸ªè½¯ä»¶\\ç»ƒä¹ \\myByteStream\\fos.txt");
-//        BufferedOutputStream bos=new BufferedOutputStream(fos); //åˆå¹¶å¦‚ä¸‹
-//        BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream("D:\\Javaå¦ä¸€ä¸ªè½¯ä»¶\\ç»ƒä¹ \\myByteStream\\bos.txt"));
-//        //å†™æ•°æ®
-//        bos.write("hello\r\n".getBytes());
-//        bos.write("world\r\n".getBytes());
-//        //é‡Šæ”¾èµ„æº
-//        bos.close();
-
-        //å­—èŠ‚ç¼“å†²è¾“å…¥æµ BufferedIntputStream(InputStream in)
-//        BufferedInputStream bis=new BufferedInputStream(new FileInputStream("D:\\Javaå¦ä¸€ä¸ªè½¯ä»¶\\ç»ƒä¹ \\myByteStream\\bos.txt"));
-//        //è¯»æ•°æ®
-//        //ä¸€æ¬¡è¯»å–ä¸€ä¸ªå­—èŠ‚æ•°æ®
+	public static void main(String[] args) throws IOException {
+		//´´½¨ÎÄ±¾ÎÄ¼ş
+//		File f1=new File("D:\\\\JavaÁíÒ»¸öÈí¼ş\\\\Á·Ï°\\\\myByteStream\\fos.txt");
+//        System.out.println(f1.createNewFile());
+//	//´´½¨×Ö½ÚÁ÷Êä³ö¶ÔÏó
+//	FileOutputStream fos=new  FileOutputStream("D:\\JavaÁíÒ»¸öÈí¼ş\\Á·Ï°\\myByteStream\\fos.txt");
+//
+//	//void write (int b) ½«Ö¸¶¨µÄ×Ö½ÚĞ´Èë´ËÎÄ¼şÊä³öÁ÷
+//	fos.write(97);
+//	fos.write(57);
+//	fos.write(55);
+//	
+//	//×îºó¶¼ÒªÊÍ·Å×ÊÔ´
+//	//void close() ¹Ø±Õ´ËÎÄ¼şÊä³öÁ÷²¢ÊÍ·ÅÓë´ËÁ÷Ïà¹ØµÄÈÎºÎÏµÍ³×ÊÔ´
+//	fos.close();
+		
+		//public Static final InputStream in; ±ê×¼ÊäÈëÁ÷  Í¨³£¸ÃÁ÷¶ÔÓ¦ÓÚ¼üÅÌÊäÈë
+//		InputStream is=System.in;
 //        int by;
-//        while((by=bis.read())!=-1){
-//            System.out.println((char)by);
+//        while((by=is.read())!=-1){
+//            System.out.print((char)by);
 //        }
-//        bis.close();
+		
+		
+		//±ê×¼ÊäÈëÊä³öÁ÷
+		
+		//public Static final InputStream in; ±ê×¼ÊäÈëÁ÷ Í¨³£¸ÃÁ÷¶ÔÓ¦ÓÚ¼üÅÌÊäÈë
+		/*
+//      InputStream is=System.in;
+//      int by;
+//      while((by=is.read())!=-1){
+//          System.out.print((char)by);
+//      }
+		
+		//ÈçºÎ°Ñ×Ö½ÚÁ÷×ª»»Îª×Ö·ûÁ÷£¿ ÓÃ×ª»»Á÷
+        //InputStream is=System.in;
+        //nputStreamReader isr=new InputStreamReader(is);
+        //Ê¹ÓÃ×Ö·ûÁ÷ÄÜ²»ÄÜÊµÏÖÒ»´Î¶ÁÈ¡Ò»ĞĞÊı¾İÄØ£¿ ¿ÉÒÔ  µ«ÊÇÒ»´Î¶ÁÈ¡Ò»ĞĞÊı¾İµÄ·½·¨ÊÇ×Ö·û»º³åÊäÈëÁ÷µÄÌØÓĞ·½·¨
+        //BufferedReader br=new BufferedReader(isr);
+        //ÓÅ»¯ÉÏÃæÈıĞĞ´úÂë
+		 BufferedReader br=new BufferedReader(new InputStreamReader((System.in)));
 
+	        System.out.println("ÇëÊäÈëÒ»ĞĞ×Ö·û´®");
+	        String line=br.readLine();
+	        System.out.println("ÄãÊäÈëµÄ×Ö·û´®ÊÇ+"+line);
 
+	        System.out.println("ÇëÊäÈëÒ»¸öÕûÊı");
+	        int i=Integer.parseInt(br.readLine());
+	        System.out.println("ÄãÊäÈëµÄÕûÊıÊÇ+"+i);
+	        
+	        //×Ô¼ºÊµÏÖ¼üÅÌÊäÈëÌ«Âé·³ÁË£¬ËùÒÔjava ¾ÍÌá¹©ÁËÒ»¸öÀà¹©ÎÒÃÇÊ¹ÓÃ
+	        Scanner sc=new Scanner(System.in);
+	        
+	        */
+		
+		//public Static final InputStream out; ±ê×¼Êä³öÁ÷ Í¨³£¸ÃÁ÷¶ÔÓ¦ÓÚ¼üÅÌÊä³ö»òÕßÓÉÖ÷»ú»·¾³»òÕßÓÃ»§Ö¸¶¨µÄÁíÍâÒ»¸öÊä³öÄ¿±ê
+		 PrintStream ps=System.out;
+	        //ÄÜ¹»·½±ãµØ´òÓ¡¸÷ÖÖÊı¾İÖµ
+	        ps.println("hello");
+	        ps.println(100);
 
-    }
+	        //System.outµÄ±¾ÖÊÊÇÒ»¸ö×Ö½ÚÊä³öÁ÷
+	        System.out.println("hello");
+	        System.out.println(100);
+	}
+
 }
-
